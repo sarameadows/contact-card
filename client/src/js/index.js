@@ -1,4 +1,4 @@
-import { initdb, getDb, postDb } from "./database";
+import { initdb, getDb, postDb, deleteDb } from "./database";
 import { fetchCards } from "./cards";
 import { toggleForm, clearForm } from "./form";
 import "../css/index.css";
@@ -51,3 +51,12 @@ form.addEventListener('submit', event => {
     // Reload the DOM
     fetchCards();
 });
+
+window.deleteCard = (e) => {
+    // grabs id fom the button element attached to the contact card
+    let id = parseInt(e.id);
+    // delete the card
+    deleteDb(id);
+    // reload the DOM
+    fetchCards();
+};

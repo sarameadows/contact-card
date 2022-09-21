@@ -1,4 +1,4 @@
-import { initdb, getDb, postDb, deleteDb } from "./database";
+import { initdb, getDb, postDb, deleteDb, editDb } from "./database";
 import { fetchCards } from "./cards";
 import { toggleForm, clearForm } from "./form";
 import "../css/index.css";
@@ -39,6 +39,13 @@ form.addEventListener('submit', event => {
     if (submitBtnToUpdate == false) {
         postDb(name, email, phone, profile);
     } else {  
+        // Obtains values passed into the form element
+        let name = document.getElementById("name").value;
+        let phone = document.getElementById("phone").value;
+        let email = document.getElementById("email").value;
+        let profile = document.querySelector('input[type="radio"]:checked').value;
+        // Calls the editDB function passing in any values from the form element as well as the ID of the contact that we are updating
+        editDb(profileId, name, email, phone, profile);
         fetchCards();
         // Toggles the submit button back to POST functionality
         submitBtnToUpdate = false;
@@ -59,4 +66,23 @@ window.deleteCard = (e) => {
     deleteDb(id);
     // reload the DOM
     fetchCards();
+};
+
+window.editCard = (e) => {
+    // grabs id fom the button element attached to the contact card and sets a global variable that will be used in the form element
+    profileId = parseInt(e.dataset.id);
+
+    // grabs information to pre-populate edit form
+    let editName = e.dataset.name;
+    let editEmail = e.dataset.email;
+    let editPhone = e.dataset.phone;
+
+    document.getElementById("name").value = editName;
+    document.getElementById("email").value = editEmail;
+    document.getElementById("phone").value = editPhone;
+
+    form.style.display = "block";
+
+    // toggles the submit button so that it updates an existing contact instead of posting a new one
+    submitBtnToUpdate = true;
 };
